@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Honeycomb Framework Diagram</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #243255;
+    --gold: #b8975a;
+    --gold-light: #d4b47a;
+    --gold-pale: #f5edd8;
+    --cream: #f8f4ee;
+    --slate: #4a5568;
+    --hex-stroke: #b8975a;
+    --bg-hex: rgba(184,151,90,0.07);
+    --bg-hex-active: rgba(184,151,90,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  /* Honeycomb background */
+  .bg-pattern {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .bg-pattern svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.18;
+  }
+
+  .main-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header-eyebrow {
+    font-family: 'Source Serif 4', serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+
+  .header-rule {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 16px auto 0;
+  }
+
+  /* Diagram area */
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Central hex SVG container */
+  .hex-diagram {
+    width: 100%;
+    max-width: 820px;
+    aspect-ratio: 1 / 0.92;
+  }
+
+  /* Editable text areas */
+  .info-panel {
+    background: white;
+    border: 1.5px solid var(--gold-light);
+    border-radius: 2px;
+    padding: 16px 20px;
+    cursor: text;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: 60px;
+  }
+
+  .info-panel:focus-within {
+    border-color: var(--gold);
+    box-shadow: 0 2px 12px rgba(184,151,90,0.18);
+  }
+
+  .panel-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  [contenteditable] {
+    outline: none;
+    font-family: 'Source Serif 4', serif;
+    font-size: 13.5px;
+    color: var(--navy);
+    line-height: 1.6;
+    min-height: 20px;
+  }
+
+  [contenteditable]:empty:before {
+    content: attr(data-placeholder);
+    color: #bbb;
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  /* Layout for panels around the SVG */
+  .diagram-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 220px;
+    grid-template-rows: auto auto auto;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+    max-width: 940px;
+  }
+
+  .panel-top    { grid-column: 2; grid-row: 1; }
+  .panel-left   { grid-column: 1; grid-row: 2; }
+  .svg-area     { grid-column: 2; grid-row: 2; }
+  .panel-right  { grid-column: 3; grid-row: 2; }
+  .panel-bottom { grid-column: 2; grid-row: 3; }
+  .panel-center { grid-column: 2; grid-row: 3; display: none; }
+
+  .connector-line {
+    stroke: var(--gold-light);
+    stroke-width: 1;
+    stroke-dasharray: 4 3;
+    fill: none;
+  }
+
+  /* Callout panels with connector arrows */
+  .panel-with-connector {
+    position: relative;
+  }
+
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* Center box below svg */
+  .center-panel-wrap {
+    grid-column: 2;
+    grid-row: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .center-panel-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 36px;
+    text-align: center;
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 0.05em;
+  }
+
+  /* Section tag badges */
+  .badge {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--gold-pale);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 1px;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Subtle honeycomb background -->
+<div class="bg-pattern">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="hexPattern" x="0" y="0" width="60" height="69.3" patternUnits="userSpaceOnUse">
+        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8"/>
+        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8" transform="translate(30,34.6)"/>
+        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8" transform="translate(-30,34.6)"/>
+      </pattern>
+    </defs>
+    <rect width="400" height="400" fill="url(#hexPattern)"/>
+  </svg>
+</div>
+
+<div class="main-container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-eyebrow">Framework Analysis</div>
+    <h1 contenteditable="true" data-placeholder="Enter Document Title Here">Regulatory Framework Overview</h1>
+    <div class="header-rule"></div>
+  </div>
+
+  <!-- Main diagram grid -->
+  <div class="diagram-layout">
+
+    <!-- TOP PANEL (Section A) -->
+    <div class="panel-top">
+      <div class="info-panel panel-with-connector">
+        <div class="badge">Section A</div>
+        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Primary Regulatory Authority</div>
+        <div class="panel-label">Details</div>
+        <div contenteditable="true" data-placeholder="Enter key points, citations, or regulatory text for this section…">Click to enter details about this section. Add citations, relevant statutes, or key findings here.</div>
+      </div>
+    </div>
+
+    <!-- LEFT PANEL (Section B) -->
+    <div class="panel-left">
+      <div class="info-panel panel-with-connector">
+        <div class="badge">Section B</div>
+        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Compliance Obligations</div>
+        <div class="panel-label">Details</div>
+        <div contenteditable="true" data-placeholder="Enter key points…">Click to enter details about this section.</div>
+      </div>
+    </div>
+
+    <!-- SVG CENTRAL DIAGRAM -->
+    <div class="svg-area">
+      <svg id="hexDiagram" viewBox="0 0 400 370" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <defs>
+          <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#1a2744" flood-opacity="0.12"/>
+          </filter>
+          <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#b8975a" flood-opacity="0.35"/>
+          </filter>
+          <clipPath id="hexClip">
+            <polygon points="200,30 340,110 340,270 200,350 60,270 60,110"/>
+          </clipPath>
+        </defs>
+
+        <!-- Outer faint hex ring (context) -->
+        <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.8" opacity="0.5"/>
+
+        <!-- Main central hexagon background -->
+        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="white" stroke="#b8975a" stroke-width="1.5" filter="url(#softShadow)"/>
+
+        <!-- THREE SECTIONS - divided lines inside hex -->
+        <!-- Section dividers: top-left to center, top-right to center, bottom to center -->
+        <!-- Top segment (A) -->
+        <polygon points="200,30 340,110 200,190 60,110" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
+        <!-- Bottom-left segment (B) -->
+        <polygon points="60,110 200,190 60,270" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
+        <!-- Bottom-right segment (C) -->
+        <polygon points="340,110 340,270 200,190" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
+        <!-- Bottom segment -->
+        <polygon points="60,270 200,190 200,350 340,270 200,190" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
+
+        <!-- Re-draw clean 3-section division -->
+        <!-- Top third -->
+        <polygon points="200,30 340,110 200,190 60,110" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+        <!-- Lower-left third -->
+        <polygon points="60,110 200,190 60,270" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+        <!-- Lower-right third -->
+        <polygon points="340,110 340,270 200,190" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+        <!-- Bottom third -->
+        <polygon points="60,270 200,190 340,270 200,350" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+
+        <!-- Dividing lines from center to 3 vertices -->
+        <line x1="200" y1="190" x2="200" y2="30"  stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+        <line x1="200" y1="190" x2="60"  y2="270" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+        <line x1="200" y1="190" x2="340" y2="270" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+
+        <!-- Section labels inside segments -->
+        <!-- Top (A) -->
+        <text x="200" y="105" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">A</text>
+        <!-- Lower-left (B) -->
+        <text x="108" y="215" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">B</text>
+        <!-- Lower-right (C) -->
+        <text x="292" y="215" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">C</text>
+        <!-- Bottom (D) -->
+        <text x="200" y="300" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">D</text>
+
+        <!-- Center circle / core -->
+        <circle cx="200" cy="190" r="44" fill="white" stroke="#b8975a" stroke-width="2" filter="url(#goldGlow)"/>
+        <circle cx="200" cy="190" r="38" fill="white" stroke="#b8975a" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.7"/>
+
+        <!-- Center label - editable via overlay -->
+        <foreignObject x="158" y="162" width="84" height="56">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="width:84px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+            <div style="font-family:'Playfair Display',serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#b8975a;line-height:1.2;margin-bottom:3px;">Core</div>
+            <div contenteditable="true" data-placeholder="Topic" style="font-family:'Playfair Display',serif;font-size:11.5px;font-weight:700;color:#1a2744;line-height:1.3;outline:none;text-align:center;min-height:14px;" title="Click to edit">Regulatory Nexus</div>
+          </div>
+        </foreignObject>
+
+        <!-- Connector arrows to panels -->
+        <!-- Top to top panel -->
+        <line x1="200" y1="30" x2="200" y2="5" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
+        <!-- Left to left panel -->
+        <line x1="60" y1="190" x2="5" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <!-- Right to right panel -->
+        <line x1="340" y1="190" x2="395" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <!-- Bottom to bottom panel -->
+        <line x1="200" y1="350" x2="200" y2="365" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+
+        <defs>
+          <marker id="arrowGold" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#b8975a" opacity="0.6"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- RIGHT PANEL (Section C) -->
+    <div class="panel-right">
+      <div class="info-panel panel-with-connector">
+        <div class="badge">Section C</div>
+        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Enforcement Mechanisms</div>
+        <div class="panel-label">Details</div>
+        <div contenteditable="true" data-placeholder="Enter key points…">Click to enter details about this section.</div>
+      </div>
+    </div>
+
+    <!-- BOTTOM PANEL (Section D) -->
+    <div style="grid-column:2;grid-row:3;">
+      <div class="info-panel panel-with-connector">
+        <div class="badge">Section D</div>
+        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Procedural Requirements</div>
+        <div class="panel-label">Details</div>
+        <div contenteditable="true" data-placeholder="Enter key points, citations, or regulatory text for this section…">Click to enter details about this section. Add citations, relevant statutes, or key findings here.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer / attribution row -->
+  <div class="footer">
+    <span contenteditable="true" data-placeholder="Organization / Document Reference / Date">Organization · Document Reference · Date</span>
+  </div>
+
+</div>
+
+<script>
+  // Subtle: prevent enter from creating <div> in contenteditable panel titles
+  document.querySelectorAll('.panel-title[contenteditable]').forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); }
+    });
+  });
+</script>
+</body>
+</html>
