@@ -289,48 +289,63 @@
           <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#1a2744" flood-opacity="0.12"/>
           </filter>
-          <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#b8975a" flood-opacity="0.35"/>
-          </filter>
           <clipPath id="hexClip">
             <polygon points="200,30 340,110 340,270 200,350 60,270 60,110"/>
           </clipPath>
         </defs>
 
-        <!-- Outer faint hex ring (context) -->
-        <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.8" opacity="0.5"/>
+        <!-- Outer faint hex ring -->
+        <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="none" stroke="#b8975a" stroke-width="0.6" opacity="0.2"/>
 
-        <!-- Main central hexagon background -->
-        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="white" stroke="#b8975a" stroke-width="1.5" filter="url(#softShadow)"/>
+        <!-- Hex interior — very faint fill for depth -->
+        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="rgba(255,255,255,0.72)" filter="url(#softShadow)"/>
 
-        <!-- THREE equal sections (120° each) — dividing lines to alternate vertices v1, v3, v5 -->
-        <!-- Section A — top wedge (v5 → v0 → v1) -->
-        <polygon points="200,190 60,110 200,30 340,110" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Section B — lower-left wedge (v5 → v4 → v3) -->
-        <polygon points="200,190 60,110 60,270 200,350" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Section C — lower-right wedge (v1 → v2 → v3) -->
-        <polygon points="200,190 340,110 340,270 200,350" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+        <!--
+          Three perimeter segments, one per panel.
+          The hexagon's 6 edges are grouped into 3 pairs of consecutive edges.
+          Each pair shares a junction vertex (v1, v3, v5) with its neighbours.
+          Vertices:
+            v0 = (200, 30)   top
+            v1 = (340, 110)  top-right   ← junction between A and C
+            v2 = (340, 270)  bottom-right
+            v3 = (200, 350)  bottom      ← junction between B and C
+            v4 = (60, 270)   bottom-left
+            v5 = (60, 110)   top-left    ← junction between A and B
+        -->
 
-        <!-- Dividing lines from center to alternate vertices -->
-        <line x1="200" y1="190" x2="60"  y2="110" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
-        <line x1="200" y1="190" x2="340" y2="110" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
-        <line x1="200" y1="190" x2="200" y2="350" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+        <!-- Segment A — top two edges (v5 → v0 → v1) — Panel A -->
+        <path d="M 60,110 L 200,30 L 340,110"
+              fill="none" stroke="#b8975a" stroke-width="2.5"
+              stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Section labels inside segments -->
-        <!-- Top (A) -->
-        <text x="200" y="100" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">A</text>
-        <!-- Lower-left (B) -->
-        <text x="105" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">B</text>
-        <!-- Lower-right (C) -->
-        <text x="295" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">C</text>
+        <!-- Segment B — lower-left two edges (v3 → v4 → v5) — Panel B -->
+        <path d="M 200,350 L 60,270 L 60,110"
+              fill="none" stroke="#b8975a" stroke-width="2.5"
+              stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Center circle / core -->
-        <circle cx="200" cy="190" r="44" fill="white" stroke="#b8975a" stroke-width="2" filter="url(#goldGlow)"/>
-        <circle cx="200" cy="190" r="38" fill="white" stroke="#b8975a" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.7"/>
+        <!-- Segment C — lower-right two edges (v1 → v2 → v3) — Panel C -->
+        <path d="M 340,110 L 340,270 L 200,350"
+              fill="none" stroke="#b8975a" stroke-width="2.5"
+              stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Center label - editable via overlay -->
-        <foreignObject x="158" y="162" width="84" height="56">
-          <div xmlns="http://www.w3.org/1999/xhtml" style="width:84px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+        <!-- Junction dots where segments meet -->
+        <circle cx="60"  cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+        <circle cx="340" cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+        <circle cx="200" cy="350" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+
+        <!-- Faint spokes from center to each junction vertex -->
+        <line x1="200" y1="190" x2="60"  y2="110" stroke="#b8975a" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.3"/>
+        <line x1="200" y1="190" x2="340" y2="110" stroke="#b8975a" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.3"/>
+        <line x1="200" y1="190" x2="200" y2="350" stroke="#b8975a" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.3"/>
+
+        <!-- Section labels — positioned in each open region -->
+        <text x="200" y="92"  text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">A</text>
+        <text x="103" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">B</text>
+        <text x="297" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">C</text>
+
+        <!-- Center label — floats in the assembled hex interior, no enclosing circle -->
+        <foreignObject x="158" y="168" width="84" height="48">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="width:84px;height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
             <div style="font-family:'Playfair Display',serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#b8975a;line-height:1.2;margin-bottom:3px;">Core</div>
             <div contenteditable="true" data-placeholder="Topic" style="font-family:'Playfair Display',serif;font-size:11.5px;font-weight:700;color:#1a2744;line-height:1.3;outline:none;text-align:center;min-height:14px;" title="Click to edit">Regulatory Nexus</div>
           </div>
