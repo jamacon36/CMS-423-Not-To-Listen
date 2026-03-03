@@ -223,17 +223,30 @@
 </head>
 <body>
 
-<!-- Subtle honeycomb background -->
+<!-- Honeycomb background texture -->
 <div class="bg-pattern">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
     <defs>
-      <pattern id="hexPattern" x="0" y="0" width="60" height="69.3" patternUnits="userSpaceOnUse">
-        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8"/>
-        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8" transform="translate(30,34.6)"/>
-        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8" transform="translate(-30,34.6)"/>
+      <!--
+        Pointy-top hexagon tessellation.
+        Circumradius r = 20, so:
+          w = r * √3 ≈ 34.64   (horizontal repeat)
+          h = 3 * r   = 60     (vertical repeat, two rows)
+        Two hexagons per tile:
+          Hex A: center (0, 0)     — shared across all four tile corners
+          Hex B: center (17.32, 30) — sits in the middle, fully inside tile
+        Adjacent hex edges are coincident, producing true interlocked honeycomb.
+      -->
+      <pattern id="hexPattern" x="0" y="0" width="34.64" height="60" patternUnits="userSpaceOnUse">
+        <!-- Hex A: center (0, 0) — corners, wraps to 4 adjacent tiles -->
+        <polygon points="0,-20 17.32,-10 17.32,10 0,20 -17.32,10 -17.32,-10"
+                 fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
+        <!-- Hex B: center (17.32, 30) — fully inside tile -->
+        <polygon points="17.32,10 34.64,20 34.64,40 17.32,50 0,40 0,20"
+                 fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
       </pattern>
     </defs>
-    <rect width="400" height="400" fill="url(#hexPattern)"/>
+    <rect width="100%" height="100%" fill="url(#hexPattern)"/>
   </svg>
 </div>
 
@@ -290,41 +303,26 @@
         <!-- Main central hexagon background -->
         <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="white" stroke="#b8975a" stroke-width="1.5" filter="url(#softShadow)"/>
 
-        <!-- THREE SECTIONS - divided lines inside hex -->
-        <!-- Section dividers: top-left to center, top-right to center, bottom to center -->
-        <!-- Top segment (A) -->
-        <polygon points="200,30 340,110 200,190 60,110" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
-        <!-- Bottom-left segment (B) -->
-        <polygon points="60,110 200,190 60,270" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
-        <!-- Bottom-right segment (C) -->
-        <polygon points="340,110 340,270 200,190" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
-        <!-- Bottom segment -->
-        <polygon points="60,270 200,190 200,350 340,270 200,190" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
+        <!-- THREE equal sections (120° each) — dividing lines to alternate vertices v1, v3, v5 -->
+        <!-- Section A — top wedge (v5 → v0 → v1) -->
+        <polygon points="200,190 60,110 200,30 340,110" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+        <!-- Section B — lower-left wedge (v5 → v4 → v3) -->
+        <polygon points="200,190 60,110 60,270 200,350" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+        <!-- Section C — lower-right wedge (v1 → v2 → v3) -->
+        <polygon points="200,190 340,110 340,270 200,350" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
 
-        <!-- Re-draw clean 3-section division -->
-        <!-- Top third -->
-        <polygon points="200,30 340,110 200,190 60,110" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Lower-left third -->
-        <polygon points="60,110 200,190 60,270" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Lower-right third -->
-        <polygon points="340,110 340,270 200,190" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Bottom third -->
-        <polygon points="60,270 200,190 340,270 200,350" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-
-        <!-- Dividing lines from center to 3 vertices -->
-        <line x1="200" y1="190" x2="200" y2="30"  stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
-        <line x1="200" y1="190" x2="60"  y2="270" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
-        <line x1="200" y1="190" x2="340" y2="270" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+        <!-- Dividing lines from center to alternate vertices -->
+        <line x1="200" y1="190" x2="60"  y2="110" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+        <line x1="200" y1="190" x2="340" y2="110" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+        <line x1="200" y1="190" x2="200" y2="350" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
 
         <!-- Section labels inside segments -->
         <!-- Top (A) -->
-        <text x="200" y="105" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">A</text>
+        <text x="200" y="100" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">A</text>
         <!-- Lower-left (B) -->
-        <text x="108" y="215" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">B</text>
+        <text x="105" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">B</text>
         <!-- Lower-right (C) -->
-        <text x="292" y="215" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">C</text>
-        <!-- Bottom (D) -->
-        <text x="200" y="300" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">D</text>
+        <text x="295" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">C</text>
 
         <!-- Center circle / core -->
         <circle cx="200" cy="190" r="44" fill="white" stroke="#b8975a" stroke-width="2" filter="url(#goldGlow)"/>
@@ -338,15 +336,13 @@
           </div>
         </foreignObject>
 
-        <!-- Connector arrows to panels -->
+        <!-- Connector lines to panels -->
         <!-- Top to top panel -->
         <line x1="200" y1="30" x2="200" y2="5" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
         <!-- Left to left panel -->
         <line x1="60" y1="190" x2="5" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
         <!-- Right to right panel -->
         <line x1="340" y1="190" x2="395" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
-        <!-- Bottom to bottom panel -->
-        <line x1="200" y1="350" x2="200" y2="365" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
 
         <defs>
           <marker id="arrowGold" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
@@ -363,16 +359,6 @@
         <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Enforcement Mechanisms</div>
         <div class="panel-label">Details</div>
         <div contenteditable="true" data-placeholder="Enter key points…">Click to enter details about this section.</div>
-      </div>
-    </div>
-
-    <!-- BOTTOM PANEL (Section D) -->
-    <div style="grid-column:2;grid-row:3;">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section D</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Procedural Requirements</div>
-        <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points, citations, or regulatory text for this section…">Click to enter details about this section. Add citations, relevant statutes, or key findings here.</div>
       </div>
     </div>
 
