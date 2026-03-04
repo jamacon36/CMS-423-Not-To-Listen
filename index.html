@@ -72,12 +72,20 @@
     margin-bottom: 10px;
   }
 
-  .header h1 {
+  .header .header-title {
     font-family: 'Playfair Display', serif;
     font-size: clamp(22px, 4vw, 34px);
     font-weight: 700;
     color: var(--navy);
     line-height: 1.2;
+  }
+
+  .header .header-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-size: clamp(14px, 3vw, 18px);
+    font-weight: 400;
+    color: var(--navy-mid);
+    margin-top: 12px;
   }
 
   .header-rule {
@@ -403,11 +411,12 @@
 <div class="main-container">
 
   <!-- Header -->
-  <div class="header">
+  <header class="header">
     <div class="header-eyebrow">Free Speech in Practice</div>
-    <h1>Captive Audience Doctrine: Where You Can Simply Not Listen</h1>
+    <h1 class="header-title">A Captive Audience: Are Americans Captives of Jimmy Kimmel?</h1>
+    <p class="header-subtitle">FCC regulation with a focus on corporate capture</p>
     <div class="header-rule"></div>
-  </div>
+  </header>
 
   <!-- Main diagram grid -->
   <div class="diagram-layout">
@@ -435,8 +444,8 @@
       <div class="info-panel panel-with-connector" data-segment="seg-b">
         <div class="panel-header">
           <div>
-            <div class="badge">1969</div>
-            <h2 class="panel-title">Tinker v. Des Moines Independent Community School District</h2>
+            <div class="badge">2011</div>
+            <h2 class="panel-title">Snyder v. Phelps</h2>
             <div class="expand-hint">Click to expand</div>
           </div>
 
@@ -502,15 +511,15 @@
         <!-- Section labels — positioned in each open region -->
         <text x="200" y="90" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Public Spaces</text>
         <text text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">
-          <tspan x="118" y="250">In Semi-Private</tspan>
-          <tspan x="114" dy="14">Spaces</tspan>
+          <tspan x="120" y="250">When the Speech</tspan>
+          <tspan x="120" dy="14">Is Disagreeable</tspan>
         </text>
         <text x="280" y="255" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Private Spaces</text>
 
         <!-- Center label — floats in the assembled hex interior, no enclosing circle -->
         <foreignObject x="120" y="145" width="160" height="90">
           <div xmlns="http://www.w3.org/1999/xhtml" class="hex-center-label">
-            <div class="hex-center-title">The Right Not To Listen...</div>
+            <div class="hex-center-title">The Right To Change The Channel...</div>
           </div>
         </foreignObject>
 
@@ -551,9 +560,9 @@
   </div>
 
   <!-- Footer / attribution row -->
-  <div class="footer">
+  <footer class="footer">
     <span>University of Southern Maine - CMS 435 · Free Speech in Practice · Macon · February 2026</span>
-  </div>
+  </footer>
 
 </div>
 
