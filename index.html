@@ -51,7 +51,6 @@
 
   .main-container {
     position: relative;
-    z-index: 1;
     width: 100%;
     max-width: 900px;
   }
@@ -128,18 +127,6 @@
     user-select: none;
   }
 
-  .panel-toggle {
-    flex-shrink: 0;
-    color: var(--gold);
-    font-size: 14px;
-    line-height: 1;
-    margin-top: 3px;
-    transition: transform 0.3s ease;
-  }
-
-  .info-panel.expanded .panel-toggle {
-    transform: rotate(180deg);
-  }
 
   .expand-hint {
     font-size: 9px;
@@ -164,11 +151,73 @@
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: max-height 0.35s ease, opacity 0.25s ease;
+  }
+
+  /* Modal overlay */
+  .panel-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 39, 68, 0.45);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .panel-backdrop.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Expanded panel becomes a centered modal */
+  .info-panel.expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    width: min(520px, 90vw);
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: panelOpen 0.25s ease forwards;
   }
 
   .info-panel.expanded .panel-content {
-    max-height: 600px;
+    max-height: none;
+    overflow: visible;
+    opacity: 1;
+    animation: contentFadeIn 0.25s ease 0.15s both;
+  }
+
+  @keyframes panelOpen {
+    from { opacity: 0; transform: translate(-50%, -47%) scale(0.97); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  @keyframes panelClose {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to   { opacity: 0; transform: translate(-50%, -47%) scale(0.97); }
+  }
+
+  @keyframes contentFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .info-panel.collapsing {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    width: min(520px, 90vw);
+    max-height: 80vh;
+    overflow-y: auto;
+    pointer-events: none;
+    animation: panelClose 0.2s ease forwards;
+  }
+
+  .info-panel.collapsing .panel-content {
+    max-height: none;
+    overflow: visible;
     opacity: 1;
   }
 
@@ -350,6 +399,8 @@
   </svg>
 </div>
 
+<div class="panel-backdrop"></div>
+
 <div class="main-container">
 
   <!-- Header -->
@@ -371,7 +422,7 @@
             <div class="panel-title">Primary Regulatory Authority</div>
             <div class="expand-hint">Click to expand</div>
           </div>
-          <div class="panel-toggle">▾</div>
+
         </div>
         <div class="panel-content">
           <div class="panel-label">Discussion</div>
@@ -389,7 +440,7 @@
             <div class="panel-title">Compliance Obligations</div>
             <div class="expand-hint">Click to expand</div>
           </div>
-          <div class="panel-toggle">▾</div>
+
         </div>
         <div class="panel-content">
           <div class="panel-label">Discussion</div>
@@ -487,7 +538,7 @@
             <div class="panel-title">Enforcement Mechanisms</div>
             <div class="expand-hint">Click to expand</div>
           </div>
-          <div class="panel-toggle">▾</div>
+
         </div>
         <div class="panel-content">
           <div class="panel-label">Discussion</div>
@@ -506,13 +557,37 @@
 </div>
 
 <script>
+  const backdrop = document.querySelector('.panel-backdrop');
+
+  function collapseAll() {
+    document.querySelectorAll('.info-panel.expanded').forEach(p => {
+      p.classList.add('collapsing');
+      p.classList.remove('expanded', 'highlighted');
+      const s = document.getElementById(p.dataset.segment);
+      if (s) s.classList.remove('highlighted');
+      p.addEventListener('animationend', () => {
+        p.classList.remove('collapsing');
+        p.parentElement.style.minHeight = '';
+      }, { once: true });
+    });
+    backdrop.classList.remove('active');
+  }
+
+  backdrop.addEventListener('click', collapseAll);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') collapseAll(); });
+
   document.querySelectorAll('.info-panel[data-segment]').forEach(panel => {
     const seg = document.getElementById(panel.dataset.segment);
 
     panel.querySelector('.panel-header').addEventListener('click', () => {
-      panel.classList.toggle('expanded');
-      seg.classList.toggle('highlighted', panel.classList.contains('expanded'));
-      panel.classList.toggle('highlighted', panel.classList.contains('expanded'));
+      const wasExpanded = panel.classList.contains('expanded');
+      collapseAll();
+      if (!wasExpanded) {
+        panel.parentElement.style.minHeight = panel.offsetHeight + 'px';
+        panel.classList.add('expanded', 'highlighted');
+        seg.classList.add('highlighted');
+        backdrop.classList.add('active');
+      }
     });
 
     panel.addEventListener('mouseenter', () => {
