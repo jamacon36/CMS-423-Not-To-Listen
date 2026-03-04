@@ -101,20 +101,55 @@
     aspect-ratio: 1 / 0.92;
   }
 
-  /* Editable text areas */
+  /* Panels */
   .info-panel {
     background: white;
     border: 1.5px solid var(--gold-light);
     border-radius: 2px;
     padding: 16px 20px;
-    cursor: text;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+    transition: border-color 0.25s, box-shadow 0.25s;
     min-height: 60px;
   }
 
-  .info-panel:focus-within {
+  .info-panel.highlighted {
     border-color: var(--gold);
-    box-shadow: 0 2px 12px rgba(184,151,90,0.18);
+    box-shadow: 0 2px 12px rgba(184,151,90,0.22);
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .panel-toggle {
+    flex-shrink: 0;
+    color: var(--gold);
+    font-size: 14px;
+    line-height: 1;
+    margin-top: 3px;
+    transition: transform 0.3s ease;
+  }
+
+  .info-panel.expanded .panel-toggle {
+    transform: rotate(180deg);
+  }
+
+  .panel-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+  }
+
+  .info-panel.expanded .panel-content {
+    max-height: 600px;
+    opacity: 1;
   }
 
   .panel-label {
@@ -123,16 +158,19 @@
     text-transform: uppercase;
     color: var(--gold);
     font-weight: 400;
+    margin-top: 12px;
     margin-bottom: 6px;
   }
 
-  [contenteditable] {
-    outline: none;
-    font-family: 'Source Serif 4', serif;
-    font-size: 13.5px;
-    color: var(--navy);
-    line-height: 1.6;
-    min-height: 20px;
+  /* SVG segment highlight */
+  .hex-segment {
+    transition: stroke 0.25s, stroke-width 0.25s, filter 0.25s;
+  }
+
+  .hex-segment.highlighted {
+    stroke: #d4a84b;
+    stroke-width: 4;
+    filter: drop-shadow(0 0 5px rgba(184,151,90,0.55));
   }
 
   /* Layout for panels around the SVG */
@@ -258,21 +296,35 @@
 
     <!-- TOP PANEL (Section A) -->
     <div class="panel-top">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section A</div>
-        <div class="panel-title">Primary Regulatory Authority</div>
-        <div class="panel-label">Details</div>
-        <div></div>
+      <div class="info-panel panel-with-connector" data-segment="seg-a">
+        <div class="panel-header">
+          <div>
+            <div class="badge">Section A</div>
+            <div class="panel-title">Primary Regulatory Authority</div>
+          </div>
+          <div class="panel-toggle">▾</div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-label">Details</div>
+          <div></div>
+        </div>
       </div>
     </div>
 
     <!-- LEFT PANEL (Section B) -->
     <div class="panel-left">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section B</div>
-        <div class="panel-title">Compliance Obligations</div>
-        <div class="panel-label">Details</div>
-        <div></div>
+      <div class="info-panel panel-with-connector" data-segment="seg-b">
+        <div class="panel-header">
+          <div>
+            <div class="badge">Section B</div>
+            <div class="panel-title">Compliance Obligations</div>
+          </div>
+          <div class="panel-toggle">▾</div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-label">Details</div>
+          <div></div>
+        </div>
       </div>
     </div>
 
@@ -308,17 +360,17 @@
         -->
 
         <!-- Segment A — top two edges (v5 → v0 → v1) — Panel A -->
-        <path d="M 60,110 L 200,30 L 340,110"
+        <path id="seg-a" class="hex-segment" d="M 60,110 L 200,30 L 340,110"
               fill="none" stroke="#b8975a" stroke-width="2.5"
               stroke-linejoin="round" stroke-linecap="round"/>
 
         <!-- Segment B — lower-left two edges (v3 → v4 → v5) — Panel B -->
-        <path d="M 200,350 L 60,270 L 60,110"
+        <path id="seg-b" class="hex-segment" d="M 200,350 L 60,270 L 60,110"
               fill="none" stroke="#b8975a" stroke-width="2.5"
               stroke-linejoin="round" stroke-linecap="round"/>
 
         <!-- Segment C — lower-right two edges (v1 → v2 → v3) — Panel C -->
-        <path d="M 340,110 L 340,270 L 200,350"
+        <path id="seg-c" class="hex-segment" d="M 340,110 L 340,270 L 200,350"
               fill="none" stroke="#b8975a" stroke-width="2.5"
               stroke-linejoin="round" stroke-linecap="round"/>
 
@@ -360,11 +412,18 @@
 
     <!-- RIGHT PANEL (Section C) -->
     <div class="panel-right">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section C</div>
-        <div class="panel-title">Enforcement Mechanisms</div>
-        <div class="panel-label">Details</div>
-        <div></div>
+      <div class="info-panel panel-with-connector" data-segment="seg-c">
+        <div class="panel-header">
+          <div>
+            <div class="badge">Section C</div>
+            <div class="panel-title">Enforcement Mechanisms</div>
+          </div>
+          <div class="panel-toggle">▾</div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-label">Details</div>
+          <div></div>
+        </div>
       </div>
     </div>
 
@@ -377,5 +436,28 @@
 
 </div>
 
+<script>
+  document.querySelectorAll('.info-panel[data-segment]').forEach(panel => {
+    const seg = document.getElementById(panel.dataset.segment);
+
+    panel.querySelector('.panel-header').addEventListener('click', () => {
+      panel.classList.toggle('expanded');
+      seg.classList.toggle('highlighted', panel.classList.contains('expanded'));
+      panel.classList.toggle('highlighted', panel.classList.contains('expanded'));
+    });
+
+    panel.addEventListener('mouseenter', () => {
+      seg.classList.add('highlighted');
+      panel.classList.add('highlighted');
+    });
+
+    panel.addEventListener('mouseleave', () => {
+      if (!panel.classList.contains('expanded')) {
+        seg.classList.remove('highlighted');
+        panel.classList.remove('highlighted');
+      }
+    });
+  });
+</script>
 </body>
 </html>
