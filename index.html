@@ -135,13 +135,6 @@
     min-height: 20px;
   }
 
-  [contenteditable]:empty:before {
-    content: attr(data-placeholder);
-    color: #bbb;
-    font-style: italic;
-    pointer-events: none;
-  }
-
   /* Layout for panels around the SVG */
   .diagram-layout {
     display: grid;
@@ -256,7 +249,7 @@
   <!-- Header -->
   <div class="header">
     <div class="header-eyebrow">Framework Analysis</div>
-    <h1 contenteditable="true" data-placeholder="Enter Document Title Here">Regulatory Framework Overview</h1>
+    <h1>Regulatory Framework Overview</h1>
     <div class="header-rule"></div>
   </div>
 
@@ -267,9 +260,9 @@
     <div class="panel-top">
       <div class="info-panel panel-with-connector">
         <div class="badge">Section A</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Primary Regulatory Authority</div>
+        <div class="panel-title">Primary Regulatory Authority</div>
         <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points, citations, or regulatory text for this section…">Click to enter details about this section. Add citations, relevant statutes, or key findings here.</div>
+        <div></div>
       </div>
     </div>
 
@@ -277,9 +270,9 @@
     <div class="panel-left">
       <div class="info-panel panel-with-connector">
         <div class="badge">Section B</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Compliance Obligations</div>
+        <div class="panel-title">Compliance Obligations</div>
         <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points…">Click to enter details about this section.</div>
+        <div></div>
       </div>
     </div>
 
@@ -369,9 +362,9 @@
     <div class="panel-right">
       <div class="info-panel panel-with-connector">
         <div class="badge">Section C</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Enforcement Mechanisms</div>
+        <div class="panel-title">Enforcement Mechanisms</div>
         <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points…">Click to enter details about this section.</div>
+        <div></div>
       </div>
     </div>
 
@@ -379,18 +372,10 @@
 
   <!-- Footer / attribution row -->
   <div class="footer">
-    <span contenteditable="true" data-placeholder="Organization / Document Reference / Date">Organization · Document Reference · Date</span>
+    <span>Organization · Document Reference · Date</span>
   </div>
 
 </div>
 
-<script>
-  // Subtle: prevent enter from creating <div> in contenteditable panel titles
-  document.querySelectorAll('.panel-title[contenteditable]').forEach(el => {
-    el.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); }
-    });
-  });
-</script>
 </body>
 </html>
