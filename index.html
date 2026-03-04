@@ -14,6 +14,7 @@
     --gold-light: #d4b47a;
     --gold-pale: #f5edd8;
     --cream: #f8f4ee;
+    --white: #ffffff;
     --slate: #4a5568;
     --hex-stroke: #b8975a;
     --bg-hex: rgba(184,151,90,0.07);
@@ -388,11 +389,9 @@
       -->
       <pattern id="hexPattern" x="0" y="0" width="34.64" height="60" patternUnits="userSpaceOnUse">
         <!-- Hex A: center (0, 0) — corners, wraps to 4 adjacent tiles -->
-        <polygon points="0,-20 17.32,-10 17.32,10 0,20 -17.32,10 -17.32,-10"
-                 fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
+        <polygon points="0,-20 17.32,-10 17.32,10 0,20 -17.32,10 -17.32,-10" fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
         <!-- Hex B: center (17.32, 30) — fully inside tile -->
-        <polygon points="17.32,10 34.64,20 34.64,40 17.32,50 0,40 0,20"
-                 fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
+        <polygon points="17.32,10 34.64,20 34.64,40 17.32,50 0,40 0,20" fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
       </pattern>
     </defs>
     <rect width="100%" height="100%" fill="url(#hexPattern)"/>
@@ -406,7 +405,7 @@
   <!-- Header -->
   <div class="header">
     <div class="header-eyebrow">Free Speech in Practice</div>
-    <h1>Captive Audience Doctrine: When You Can Simply Not Listen</h1>
+    <h1>Captive Audience Doctrine: Where You Can Simply Not Listen</h1>
     <div class="header-rule"></div>
   </div>
 
@@ -465,7 +464,7 @@
         <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="none" stroke="#b8975a" stroke-width="0.6" opacity="0.2"/>
 
         <!-- Hex interior fill -->
-        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="var(--cream)"/>
+        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="var(--white)"/>
 
         <!--
           Three perimeter segments, one per panel.
@@ -501,17 +500,17 @@
         <circle cx="200" cy="350" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
 
         <!-- Section labels — positioned in each open region -->
-        <text x="200" y="90" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Pseudo-Public Spaces</text>
+        <text x="200" y="90" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Public Spaces</text>
         <text text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">
-          <tspan x="117" y="250">In Traditional</tspan>
-          <tspan x="114" dy="14">Public Spaces</tspan>
+          <tspan x="118" y="250">In Semi-Private</tspan>
+          <tspan x="114" dy="14">Spaces</tspan>
         </text>
         <text x="280" y="255" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Private Spaces</text>
 
         <!-- Center label — floats in the assembled hex interior, no enclosing circle -->
         <foreignObject x="120" y="145" width="160" height="90">
           <div xmlns="http://www.w3.org/1999/xhtml" class="hex-center-label">
-            <div class="hex-center-title">The Right Not To Listen</div>
+            <div class="hex-center-title">The Right Not To Listen...</div>
           </div>
         </foreignObject>
 
