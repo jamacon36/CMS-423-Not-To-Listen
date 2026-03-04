@@ -17,6 +17,7 @@
     --hex-stroke: #b8975a;
     --bg-hex: rgba(184,151,90,0.07);
     --bg-hex-active: rgba(184,151,90,0.15);
+    --panel-top-margin: 12.1875rem; /* 195px, calculated to align with hex vertices */
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -153,9 +154,9 @@
   }
 
   .panel-top    { grid-column: 2; grid-row: 1; }
-  .panel-left   { grid-column: 1; grid-row: 2; }
+  .panel-left   { grid-column: 1; grid-row: 2; align-self: start; margin-top: var(--panel-top-margin); }
   .svg-area     { grid-column: 2; grid-row: 2; }
-  .panel-right  { grid-column: 3; grid-row: 2; }
+  .panel-right  { grid-column: 3; grid-row: 2; align-self: start; margin-top: var(--panel-top-margin); }
   .panel-bottom { grid-column: 2; grid-row: 3; }
   .panel-center { grid-column: 2; grid-row: 3; display: none; }
 
@@ -297,8 +298,8 @@
         <!-- Outer faint hex ring -->
         <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="none" stroke="#b8975a" stroke-width="0.6" opacity="0.2"/>
 
-        <!-- Hex interior — very faint fill for depth -->
-        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="rgba(255,255,255,0.72)" filter="url(#softShadow)"/>
+        <!-- Hex interior fill -->
+        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="var(--cream)"/>
 
         <!--
           Three perimeter segments, one per panel.
@@ -333,15 +334,10 @@
         <circle cx="340" cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
         <circle cx="200" cy="350" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
 
-        <!-- Faint spokes from center to each junction vertex -->
-        <line x1="200" y1="190" x2="60"  y2="110" stroke="#b8975a" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.3"/>
-        <line x1="200" y1="190" x2="340" y2="110" stroke="#b8975a" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.3"/>
-        <line x1="200" y1="190" x2="200" y2="350" stroke="#b8975a" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.3"/>
-
         <!-- Section labels — positioned in each open region -->
-        <text x="200" y="92"  text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">A</text>
-        <text x="103" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">B</text>
-        <text x="297" y="242" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">C</text>
+        <text x="200" y="60"  text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">A</text>
+        <text x="82"  y="252" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">B</text>
+        <text x="318" y="252" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">C</text>
 
         <!-- Center label — floats in the assembled hex interior, no enclosing circle -->
         <foreignObject x="158" y="168" width="84" height="48">
@@ -355,9 +351,9 @@
         <!-- Top to top panel -->
         <line x1="200" y1="30" x2="200" y2="5" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
         <!-- Left to left panel -->
-        <line x1="60" y1="190" x2="5" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="60" y1="252" x2="5" y2="252" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
         <!-- Right to right panel -->
-        <line x1="340" y1="190" x2="395" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <line x1="340" y1="252" x2="395" y2="252" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
 
         <defs>
           <marker id="arrowGold" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
