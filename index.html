@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Honeycomb Framework Diagram</title>
+<title>CMS 435 Macon</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -17,6 +17,7 @@
     --hex-stroke: #b8975a;
     --bg-hex: rgba(184,151,90,0.07);
     --bg-hex-active: rgba(184,151,90,0.15);
+    --panel-top-margin: 12.1875rem; /* 195px, calculated to align with hex vertices */
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,20 +101,74 @@
     aspect-ratio: 1 / 0.92;
   }
 
-  /* Editable text areas */
+  /* Panels */
   .info-panel {
     background: white;
     border: 1.5px solid var(--gold-light);
     border-radius: 2px;
     padding: 16px 20px;
-    cursor: text;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+    transition: border-color 0.25s, box-shadow 0.25s;
     min-height: 60px;
   }
 
-  .info-panel:focus-within {
+  .info-panel.highlighted {
     border-color: var(--gold);
-    box-shadow: 0 2px 12px rgba(184,151,90,0.18);
+    box-shadow: 0 2px 12px rgba(184,151,90,0.22);
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .panel-toggle {
+    flex-shrink: 0;
+    color: var(--gold);
+    font-size: 14px;
+    line-height: 1;
+    margin-top: 3px;
+    transition: transform 0.3s ease;
+  }
+
+  .info-panel.expanded .panel-toggle {
+    transform: rotate(180deg);
+  }
+
+  .expand-hint {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.55;
+    margin-top: 5px;
+    transition: opacity 0.25s;
+  }
+
+  .info-panel.highlighted .expand-hint {
+    opacity: 0.85;
+  }
+
+  .info-panel.expanded .expand-hint {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .panel-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+  }
+
+  .info-panel.expanded .panel-content {
+    max-height: 600px;
+    opacity: 1;
   }
 
   .panel-label {
@@ -125,20 +180,49 @@
     margin-bottom: 6px;
   }
 
-  [contenteditable] {
-    outline: none;
-    font-family: 'Source Serif 4', serif;
-    font-size: 13.5px;
-    color: var(--navy);
-    line-height: 1.6;
-    min-height: 20px;
+  /* SVG segment highlight */
+  .hex-segment {
+    transition: stroke 0.25s, stroke-width 0.25s, filter 0.25s;
   }
 
-  [contenteditable]:empty:before {
-    content: attr(data-placeholder);
-    color: #bbb;
-    font-style: italic;
-    pointer-events: none;
+  .hex-segment.highlighted {
+    stroke: #d4a84b;
+    stroke-width: 4;
+    filter: drop-shadow(0 0 5px rgba(184,151,90,0.55));
+  }
+
+  #hexDiagram {
+    width: 100%;
+    height: auto;
+  }
+
+  .hex-center-label {
+    width: 160px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hex-center-eyebrow {
+    font-family: 'Playfair Display', serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+
+  .hex-center-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.35;
+    text-align: center;
   }
 
   /* Layout for panels around the SVG */
@@ -153,11 +237,26 @@
   }
 
   .panel-top    { grid-column: 2; grid-row: 1; }
-  .panel-left   { grid-column: 1; grid-row: 2; }
+  .panel-left   { grid-column: 1; grid-row: 2; align-self: start; margin-top: var(--panel-top-margin); }
   .svg-area     { grid-column: 2; grid-row: 2; }
-  .panel-right  { grid-column: 3; grid-row: 2; }
+  .panel-right  { grid-column: 3; grid-row: 2; align-self: start; margin-top: var(--panel-top-margin); }
   .panel-bottom { grid-column: 2; grid-row: 3; }
   .panel-center { grid-column: 2; grid-row: 3; display: none; }
+
+  /* Mobile layout */
+  @media (max-width: 720px) {
+    .diagram-layout {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    .panel-top    { grid-column: 1; grid-row: 1; }
+    .panel-left   { grid-column: 1; grid-row: 2; align-self: auto; margin-top: 0; }
+    .panel-right  { grid-column: 1; grid-row: 3; align-self: auto; margin-top: 0; }
+    .svg-area     { grid-column: 1; grid-row: 4; }
+
+    .svg-connector { display: none; }
+  }
 
   .connector-line {
     stroke: var(--gold-light);
@@ -223,17 +322,30 @@
 </head>
 <body>
 
-<!-- Subtle honeycomb background -->
+<!-- Honeycomb background texture -->
 <div class="bg-pattern">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
     <defs>
-      <pattern id="hexPattern" x="0" y="0" width="60" height="69.3" patternUnits="userSpaceOnUse">
-        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8"/>
-        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8" transform="translate(30,34.6)"/>
-        <polygon points="30,2 58,17 58,52 30,67 2,52 2,17" fill="none" stroke="#b8975a" stroke-width="0.8" transform="translate(-30,34.6)"/>
+      <!--
+        Pointy-top hexagon tessellation.
+        Circumradius r = 20, so:
+          w = r * √3 ≈ 34.64   (horizontal repeat)
+          h = 3 * r   = 60     (vertical repeat, two rows)
+        Two hexagons per tile:
+          Hex A: center (0, 0)     — shared across all four tile corners
+          Hex B: center (17.32, 30) — sits in the middle, fully inside tile
+        Adjacent hex edges are coincident, producing true interlocked honeycomb.
+      -->
+      <pattern id="hexPattern" x="0" y="0" width="34.64" height="60" patternUnits="userSpaceOnUse">
+        <!-- Hex A: center (0, 0) — corners, wraps to 4 adjacent tiles -->
+        <polygon points="0,-20 17.32,-10 17.32,10 0,20 -17.32,10 -17.32,-10"
+                 fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
+        <!-- Hex B: center (17.32, 30) — fully inside tile -->
+        <polygon points="17.32,10 34.64,20 34.64,40 17.32,50 0,40 0,20"
+                 fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.7"/>
       </pattern>
     </defs>
-    <rect width="400" height="400" fill="url(#hexPattern)"/>
+    <rect width="100%" height="100%" fill="url(#hexPattern)"/>
   </svg>
 </div>
 
@@ -241,8 +353,8 @@
 
   <!-- Header -->
   <div class="header">
-    <div class="header-eyebrow">Framework Analysis</div>
-    <h1 contenteditable="true" data-placeholder="Enter Document Title Here">Regulatory Framework Overview</h1>
+    <div class="header-eyebrow">Free Speech in Practice</div>
+    <h1>Project Title Placeholder</h1>
     <div class="header-rule"></div>
   </div>
 
@@ -251,102 +363,111 @@
 
     <!-- TOP PANEL (Section A) -->
     <div class="panel-top">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section A</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Primary Regulatory Authority</div>
-        <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points, citations, or regulatory text for this section…">Click to enter details about this section. Add citations, relevant statutes, or key findings here.</div>
+      <div class="info-panel panel-with-connector" data-segment="seg-a">
+        <div class="panel-header">
+          <div>
+            <div class="badge">Section A</div>
+            <div class="panel-title">Primary Regulatory Authority</div>
+            <div class="expand-hint">Click to expand</div>
+          </div>
+          <div class="panel-toggle">▾</div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-label">Discussion</div>
+          <div></div>
+        </div>
       </div>
     </div>
 
     <!-- LEFT PANEL (Section B) -->
     <div class="panel-left">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section B</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Compliance Obligations</div>
-        <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points…">Click to enter details about this section.</div>
+      <div class="info-panel panel-with-connector" data-segment="seg-b">
+        <div class="panel-header">
+          <div>
+            <div class="badge">Section B</div>
+            <div class="panel-title">Compliance Obligations</div>
+            <div class="expand-hint">Click to expand</div>
+          </div>
+          <div class="panel-toggle">▾</div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-label">Discussion</div>
+          <div></div>
+        </div>
       </div>
     </div>
 
     <!-- SVG CENTRAL DIAGRAM -->
     <div class="svg-area">
-      <svg id="hexDiagram" viewBox="0 0 400 370" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+      <svg id="hexDiagram" viewBox="0 0 400 370" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#1a2744" flood-opacity="0.12"/>
-          </filter>
-          <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#b8975a" flood-opacity="0.35"/>
           </filter>
           <clipPath id="hexClip">
             <polygon points="200,30 340,110 340,270 200,350 60,270 60,110"/>
           </clipPath>
         </defs>
 
-        <!-- Outer faint hex ring (context) -->
-        <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="rgba(184,151,90,0.04)" stroke="#b8975a" stroke-width="0.8" opacity="0.5"/>
+        <!-- Outer faint hex ring -->
+        <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="none" stroke="#b8975a" stroke-width="0.6" opacity="0.2"/>
 
-        <!-- Main central hexagon background -->
-        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="white" stroke="#b8975a" stroke-width="1.5" filter="url(#softShadow)"/>
+        <!-- Hex interior fill -->
+        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="var(--cream)"/>
 
-        <!-- THREE SECTIONS - divided lines inside hex -->
-        <!-- Section dividers: top-left to center, top-right to center, bottom to center -->
-        <!-- Top segment (A) -->
-        <polygon points="200,30 340,110 200,190 60,110" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
-        <!-- Bottom-left segment (B) -->
-        <polygon points="60,110 200,190 60,270" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
-        <!-- Bottom-right segment (C) -->
-        <polygon points="340,110 340,270 200,190" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
-        <!-- Bottom segment -->
-        <polygon points="60,270 200,190 200,350 340,270 200,190" fill="rgba(26,39,68,0.03)" stroke="#b8975a" stroke-width="1.2"/>
+        <!--
+          Three perimeter segments, one per panel.
+          The hexagon's 6 edges are grouped into 3 pairs of consecutive edges.
+          Each pair shares a junction vertex (v1, v3, v5) with its neighbours.
+          Vertices:
+            v0 = (200, 30)   top
+            v1 = (340, 110)  top-right   ← junction between A and C
+            v2 = (340, 270)  bottom-right
+            v3 = (200, 350)  bottom      ← junction between B and C
+            v4 = (60, 270)   bottom-left
+            v5 = (60, 110)   top-left    ← junction between A and B
+        -->
 
-        <!-- Re-draw clean 3-section division -->
-        <!-- Top third -->
-        <polygon points="200,30 340,110 200,190 60,110" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Lower-left third -->
-        <polygon points="60,110 200,190 60,270" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Lower-right third -->
-        <polygon points="340,110 340,270 200,190" fill="rgba(26,39,68,0.05)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
-        <!-- Bottom third -->
-        <polygon points="60,270 200,190 340,270 200,350" fill="rgba(184,151,90,0.06)" stroke="#b8975a" stroke-width="1.4" stroke-linejoin="round"/>
+        <!-- Segment A — top two edges (v5 → v0 → v1) — Panel A -->
+        <path id="seg-a" class="hex-segment" d="M 60,110 L 200,30 L 340,110"
+              fill="none" stroke="#b8975a" stroke-width="2.5"
+              stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Dividing lines from center to 3 vertices -->
-        <line x1="200" y1="190" x2="200" y2="30"  stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
-        <line x1="200" y1="190" x2="60"  y2="270" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
-        <line x1="200" y1="190" x2="340" y2="270" stroke="#b8975a" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
+        <!-- Segment B — lower-left two edges (v3 → v4 → v5) — Panel B -->
+        <path id="seg-b" class="hex-segment" d="M 200,350 L 60,270 L 60,110"
+              fill="none" stroke="#b8975a" stroke-width="2.5"
+              stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Section labels inside segments -->
-        <!-- Top (A) -->
-        <text x="200" y="105" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">A</text>
-        <!-- Lower-left (B) -->
-        <text x="108" y="215" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">B</text>
-        <!-- Lower-right (C) -->
-        <text x="292" y="215" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">C</text>
-        <!-- Bottom (D) -->
-        <text x="200" y="300" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.05em" opacity="0.5">D</text>
+        <!-- Segment C — lower-right two edges (v1 → v2 → v3) — Panel C -->
+        <path id="seg-c" class="hex-segment" d="M 340,110 L 340,270 L 200,350"
+              fill="none" stroke="#b8975a" stroke-width="2.5"
+              stroke-linejoin="round" stroke-linecap="round"/>
 
-        <!-- Center circle / core -->
-        <circle cx="200" cy="190" r="44" fill="white" stroke="#b8975a" stroke-width="2" filter="url(#goldGlow)"/>
-        <circle cx="200" cy="190" r="38" fill="white" stroke="#b8975a" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.7"/>
+        <!-- Junction dots where segments meet -->
+        <circle cx="60"  cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+        <circle cx="340" cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+        <circle cx="200" cy="350" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
 
-        <!-- Center label - editable via overlay -->
-        <foreignObject x="158" y="162" width="84" height="56">
-          <div xmlns="http://www.w3.org/1999/xhtml" style="width:84px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
-            <div style="font-family:'Playfair Display',serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#b8975a;line-height:1.2;margin-bottom:3px;">Core</div>
-            <div contenteditable="true" data-placeholder="Topic" style="font-family:'Playfair Display',serif;font-size:11.5px;font-weight:700;color:#1a2744;line-height:1.3;outline:none;text-align:center;min-height:14px;" title="Click to edit">Regulatory Nexus</div>
+        <!-- Section labels — positioned in each open region -->
+        <text x="200" y="60"  text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">A</text>
+        <text x="82"  y="252" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">B</text>
+        <text x="318" y="252" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">C</text>
+
+        <!-- Center label — floats in the assembled hex interior, no enclosing circle -->
+        <foreignObject x="120" y="145" width="160" height="90">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="hex-center-label">
+            <div class="hex-center-eyebrow">Protected Right</div>
+            <div class="hex-center-title">The Right Not To Listen</div>
           </div>
         </foreignObject>
 
-        <!-- Connector arrows to panels -->
+        <!-- Connector lines to panels -->
         <!-- Top to top panel -->
-        <line x1="200" y1="30" x2="200" y2="5" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
+        <line class="svg-connector" x1="200" y1="30" x2="200" y2="5" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowGold)" opacity="0.5"/>
         <!-- Left to left panel -->
-        <line x1="60" y1="190" x2="5" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <line class="svg-connector" x1="60" y1="252" x2="5" y2="252" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
         <!-- Right to right panel -->
-        <line x1="340" y1="190" x2="395" y2="190" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
-        <!-- Bottom to bottom panel -->
-        <line x1="200" y1="350" x2="200" y2="365" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+        <line class="svg-connector" x1="340" y1="252" x2="395" y2="252" stroke="#b8975a" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
 
         <defs>
           <marker id="arrowGold" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
@@ -358,21 +479,19 @@
 
     <!-- RIGHT PANEL (Section C) -->
     <div class="panel-right">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section C</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Enforcement Mechanisms</div>
-        <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points…">Click to enter details about this section.</div>
-      </div>
-    </div>
-
-    <!-- BOTTOM PANEL (Section D) -->
-    <div style="grid-column:2;grid-row:3;">
-      <div class="info-panel panel-with-connector">
-        <div class="badge">Section D</div>
-        <div class="panel-title" contenteditable="true" data-placeholder="Section Heading">Procedural Requirements</div>
-        <div class="panel-label">Details</div>
-        <div contenteditable="true" data-placeholder="Enter key points, citations, or regulatory text for this section…">Click to enter details about this section. Add citations, relevant statutes, or key findings here.</div>
+      <div class="info-panel panel-with-connector" data-segment="seg-c">
+        <div class="panel-header">
+          <div>
+            <div class="badge">Section C</div>
+            <div class="panel-title">Enforcement Mechanisms</div>
+            <div class="expand-hint">Click to expand</div>
+          </div>
+          <div class="panel-toggle">▾</div>
+        </div>
+        <div class="panel-content">
+          <div class="panel-label">Discussion</div>
+          <div></div>
+        </div>
       </div>
     </div>
 
@@ -380,16 +499,31 @@
 
   <!-- Footer / attribution row -->
   <div class="footer">
-    <span contenteditable="true" data-placeholder="Organization / Document Reference / Date">Organization · Document Reference · Date</span>
+    <span>University of Southern Maine - CMS 435 · Free Speech in Practice · Macon · 2/5/2026</span>
   </div>
 
 </div>
 
 <script>
-  // Subtle: prevent enter from creating <div> in contenteditable panel titles
-  document.querySelectorAll('.panel-title[contenteditable]').forEach(el => {
-    el.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); }
+  document.querySelectorAll('.info-panel[data-segment]').forEach(panel => {
+    const seg = document.getElementById(panel.dataset.segment);
+
+    panel.querySelector('.panel-header').addEventListener('click', () => {
+      panel.classList.toggle('expanded');
+      seg.classList.toggle('highlighted', panel.classList.contains('expanded'));
+      panel.classList.toggle('highlighted', panel.classList.contains('expanded'));
+    });
+
+    panel.addEventListener('mouseenter', () => {
+      seg.classList.add('highlighted');
+      panel.classList.add('highlighted');
+    });
+
+    panel.addEventListener('mouseleave', () => {
+      if (!panel.classList.contains('expanded')) {
+        seg.classList.remove('highlighted');
+        panel.classList.remove('highlighted');
+      }
     });
   });
 </script>
