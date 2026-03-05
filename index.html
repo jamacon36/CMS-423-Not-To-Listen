@@ -474,6 +474,57 @@
     flex: 1;
   }
 
+  /* Panel body content */
+  .panel-body {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel-body h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .panel-body p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--slate);
+    line-height: 1.65;
+  }
+
+  .panel-body p + p {
+    margin-top: 8px;
+  }
+
+  /* Taxonomy pills */
+  .panel-body__types {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .panel-body__types span {
+    display: inline-block;
+    align-self: flex-start;
+    background: var(--gold-pale);
+    border: 1px solid var(--gold-light);
+    color: var(--navy);
+    font-family: 'Source Serif 4', serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
   /* Section tag badges */
   .badge {
     display: inline-block;
@@ -517,6 +568,7 @@
 
 <div class="panel-backdrop"></div>
 
+<!-- Hex Modal -->
 <div id="hexModal" class="hex-modal">
   <svg class="hex-modal-frame" viewBox="0 0 440 508" xmlns="http://www.w3.org/2000/svg">
     <polygon points="220,3 437,127 437,381 220,505 3,381 3,127" fill="var(--cream)" stroke="var(--gold)" stroke-width="3"/>
@@ -533,6 +585,7 @@
   </div>
 </div>
 
+<!-- Main Container -->
 <div class="main-container">
 
   <!-- Header -->
@@ -546,7 +599,7 @@
   <!-- Main diagram grid -->
   <div class="diagram-layout">
 
-    <!-- TOP PANEL (Section A) -->
+    <!-- TOP PANEL (Cohen) -->
     <div class="panel-top">
       <div class="info-panel panel-with-connector" data-segment="seg-a">
         <div class="panel-header">
@@ -564,7 +617,7 @@
       </div>
     </div>
 
-    <!-- LEFT PANEL (Section B) -->
+    <!-- LEFT PANEL (Snyder) -->
     <div class="panel-left">
       <div class="info-panel panel-with-connector" data-segment="seg-b">
         <div class="panel-header">
@@ -577,7 +630,24 @@
         </div>
         <div class="panel-content">
           <h3 class="panel-label">Discussion</h3>
-          <div></div>
+          <div class="panel-body">
+            <div class="panel-body__types">
+              <h4>Type(s) of Speech at Issue</h4>
+              <span>Peaceable Assembly in Public Space</span>
+              <span>The Right Not To Listen</span>
+            </div>
+            <div class="panel-body__boundaries">
+              <h4>Boundary that The Court draws</h4>
+              <p>
+                Because Westboro's speech was done in a public space and they packed up their signs and removed their protest shortly into the private part of the funeral and stayed away during the burial the Court saw no captivity in the audience inside the church. As such, holding to earlier opinions that reinforced the captive audience doctrine set forth in Cohen v. California, The Court upheld that the ideological content of the speech in question doesn't constitute emotional distress.
+              </p>
+            </div>
+            <div class="panel-body__consequences">
+              <h4>Consequences of The Court's Boundary</h4>
+              <p>Westboro's speech wasn't seen as causing material emotional distress during the private portion of the ceremony where the captive audience doctrine could theoretically apply.</p>
+              <p>If, say, the protestors had remained all the way through the official proceeding portion of the funeral then they would have had a captive audience to their message. In this scenario, Westboro could have their speech acted on by those whose right not to listen to their message was being infringed on by having to choose between either remaining in the church and hearing Westboro's protest or leaving the private funeral to escape it.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -674,13 +744,13 @@
       </svg>
     </div>
 
-    <!-- RIGHT PANEL (Section C) -->
+    <!-- RIGHT PANEL (Pacifica) -->
     <div class="panel-right">
       <div class="info-panel panel-with-connector" data-segment="seg-c">
         <div class="panel-header">
           <div>
             <div class="badge">1978</div>
-            <h2 class="panel-title">Pacific v. FCC</h2>
+            <h2 class="panel-title">Pacifica v. FCC</h2>
             <div class="expand-hint">Click to expand</div>
           </div>
 
