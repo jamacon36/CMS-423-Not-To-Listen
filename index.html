@@ -334,7 +334,7 @@
 
   .panel-title {
     font-family: 'Playfair Display', serif;
-    font-size: 13px;
+    font-size: 1rem;
     color: var(--navy);
     font-weight: 600;
     margin-bottom: 4px;
@@ -474,15 +474,15 @@
     flex: 1;
   }
 
-  /* Panel body content */
-  .panel-body {
+  /* Panel content */
+  .panel-content {
     margin-top: 12px;
     display: flex;
     flex-direction: column;
     gap: 16px;
   }
 
-  .panel-body h4 {
+  .panel-content h3 {
     font-family: 'Source Serif 4', serif;
     font-size: 9px;
     font-weight: 400;
@@ -492,7 +492,7 @@
     margin-bottom: 8px;
   }
 
-  .panel-body p {
+  .panel-content p {
     font-family: 'Source Serif 4', serif;
     font-size: 13px;
     font-weight: 300;
@@ -500,18 +500,18 @@
     line-height: 1.65;
   }
 
-  .panel-body p + p {
+  .panel-content p + p {
     margin-top: 8px;
   }
 
   /* Taxonomy pills */
-  .panel-body__types {
+  .panel-content__types {
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
 
-  .panel-body__types span {
+  .panel-content__types span {
     display: inline-block;
     align-self: flex-start;
     background: var(--gold-pale);
@@ -611,8 +611,24 @@
 
         </div>
         <div class="panel-content">
-          <h3 class="panel-label">Discussion</h3>
-          <div></div>
+          <div class="panel-content__types">
+            <h3>Type(s) of Speech at Issue</h3>
+            <span>The Right Not To Listen</span>
+            <span>Obscene Speech</span>
+            <span>Peaceable Assembly in Public Space</span>
+          </div>
+          <div class="panel-content__overview">
+            <h3>Case Overview</h3>
+            
+          </div>
+          <div class="panel-content__boundaries">
+            <h3>Boundary that The Court draws</h3>
+            
+          </div>
+          <div class="panel-content__consequences">
+            <h3>Consequences of The Court's Boundary</h3>
+            
+          </div>
         </div>
       </div>
     </div>
@@ -626,27 +642,28 @@
             <h2 class="panel-title">Snyder v. Phelps</h2>
             <div class="expand-hint">Click to expand</div>
           </div>
-
         </div>
         <div class="panel-content">
-          <h3 class="panel-label">Discussion</h3>
-          <div class="panel-body">
-            <div class="panel-body__types">
-              <h4>Type(s) of Speech at Issue</h4>
-              <span>Peaceable Assembly in Public Space</span>
-              <span>The Right Not To Listen</span>
-            </div>
-            <div class="panel-body__boundaries">
-              <h4>Boundary that The Court draws</h4>
-              <p>
-                Because Westboro's speech was done in a public space and they packed up their signs and removed their protest shortly into the private part of the funeral and stayed away during the burial the Court saw no captivity in the audience inside the church. As such, holding to earlier opinions that reinforced the captive audience doctrine set forth in Cohen v. California, The Court upheld that the ideological content of the speech in question doesn't constitute emotional distress.
-              </p>
-            </div>
-            <div class="panel-body__consequences">
-              <h4>Consequences of The Court's Boundary</h4>
-              <p>Westboro's speech wasn't seen as causing material emotional distress during the private portion of the ceremony where the captive audience doctrine could theoretically apply.</p>
-              <p>If, say, the protestors had remained all the way through the official proceeding portion of the funeral then they would have had a captive audience to their message. In this scenario, Westboro could have their speech acted on by those whose right not to listen to their message was being infringed on by having to choose between either remaining in the church and hearing Westboro's protest or leaving the private funeral to escape it.</p>
-            </div>
+          <div class="panel-content__types">
+            <h3>Type(s) of Speech at Issue</h3>
+            <span>Peaceable Assembly in Public Space</span>
+            <span>The Right Not To Listen</span>
+          </div>
+          <div class="panel-content__overview">
+            <h3>Case Overview</h3>
+            <p>Westboro Baptist Church made a reputation for itself by using inflammatory and offensive language in its protests. These protests took place in the early 2000s and included signs with messages like “God Hates Fags” and other homophobic hateful language. When the Iraq war started they began protesting soldiers' funerals with signs and chants that held a similar hateful tone. One father of the fallen soldier felt that they didn’t have the right to protest funerals and sued Fred Phelps, the leader of the church for emotional distress.</p>
+            <p>The case made its way to the Supreme Court who ultimately decided that Westboro wasn’t liable for their speech, a decision owing in large part to the captive audience doctrine.</p>
+          </div>
+          <div class="panel-content__boundaries">
+            <h3>Boundary that The Court draws</h3>
+            <p>
+              Because Westboro's speech was done in a public space and they packed up their signs and removed their protest shortly into the private part of the funeral and stayed away during the burial the Court saw no captivity in the audience inside the church. As such, holding to earlier opinions that reinforced the captive audience doctrine set forth in Cohen v. California, The Court upheld that the ideological content of the speech in question doesn't constitute emotional distress.
+            </p>
+          </div>
+          <div class="panel-content__consequences">
+            <h3>Consequences of The Court's Boundary</h3>
+            <p>Westboro's speech wasn't seen as causing material emotional distress during the private portion of the ceremony where the captive audience doctrine could theoretically apply.</p>
+            <p>If, say, the protestors had remained all the way through the official proceeding portion of the funeral then they would have had a captive audience to their message. In this scenario, Westboro could have their speech acted on by those whose right not to listen to their message was being infringed on by having to choose between either remaining in the church and hearing Westboro's protest or leaving the private funeral to escape it.</p>
           </div>
         </div>
       </div>
@@ -756,8 +773,23 @@
 
         </div>
         <div class="panel-content">
-          <h3 class="panel-label">Discussion</h3>
-          <div></div>
+          <div class="panel-content__types">
+            <h3>Type(s) of Speech at Issue</h3>
+            <span>The Right Not To Listen</span>
+            <span>Obscene Speech</span>
+          </div>
+          <div class="panel-content__overview">
+            <h3>Case Overview</h3>
+            
+          </div>
+          <div class="panel-content__boundaries">
+            <h3>Boundary that The Court draws</h3>
+            
+          </div>
+          <div class="panel-content__consequences">
+            <h3>Consequences of The Court's Boundary</h3>
+            
+          </div>
         </div>
       </div>
     </div>
