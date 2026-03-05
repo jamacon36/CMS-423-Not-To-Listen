@@ -383,6 +383,7 @@
 
   #hexHoverHint {
     pointer-events: none;
+    opacity: 0.45;
     transition: opacity 0.2s;
   }
 
@@ -399,7 +400,8 @@
   #hexDiagram.hex-expanded .svg-connector,
   #hexDiagram.hex-expanded .junction-dot,
   #hexDiagram.hex-expanded .section-label,
-  #hexDiagram.hex-expanded .outer-hex-ring {
+  #hexDiagram.hex-expanded .outer-hex-ring,
+  #hexDiagram.hex-expanded #hexHoverHint {
     opacity: 0;
   }
 
@@ -666,7 +668,7 @@
         <!-- Hover hint — shown by JS on mouseenter of hexClickOverlay -->
         <text id="hexHoverHint" x="200" y="285" text-anchor="middle"
           fill="#b8975a" font-family="'Source Serif 4', serif" font-size="9"
-          letter-spacing="0.18em" opacity="0">
+          letter-spacing="0.18em">
           CLICK TO EXPAND
         </text>
       </svg>
@@ -755,16 +757,13 @@
   const hexInterior = document.getElementById('hexInterior');
   const hexOverlay = document.getElementById('hexClickOverlay');
   const hexModal = document.getElementById('hexModal');
-  const hexHoverHint = document.getElementById('hexHoverHint');
 
   hexOverlay.addEventListener('mouseenter', () => {
     hexInterior.classList.add('hovered');
-    hexHoverHint.setAttribute('opacity', '0.7');
   });
 
   hexOverlay.addEventListener('mouseleave', () => {
     hexInterior.classList.remove('hovered');
-    hexHoverHint.setAttribute('opacity', '0');
   });
 
   hexOverlay.addEventListener('click', () => {
@@ -773,7 +772,6 @@
     document.getElementById('hexDiagram').classList.add('hex-expanded');
     backdrop.classList.add('active');
     hexInterior.classList.remove('hovered');
-    hexHoverHint.setAttribute('opacity', '0');
   });
 </script>
 </body>
