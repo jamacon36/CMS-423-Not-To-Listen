@@ -306,7 +306,7 @@
   .panel-center { grid-column: 2; grid-row: 3; display: none; }
 
   /* Mobile layout */
-  @media (max-width: 720px) {
+  @media (max-width: 1023px) {
     .diagram-layout {
       grid-template-columns: 1fr;
       grid-template-rows: auto;
@@ -408,8 +408,8 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 440px;
-    height: 508px;
+    width: 40rem;
+    aspect-ratio: 1;
     z-index: 100;
     opacity: 0;
     pointer-events: none;
@@ -447,7 +447,7 @@
 
   .hex-modal-title {
     font-family: 'Playfair Display', serif;
-    font-size: 15px;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--navy);
     line-height: 1.4;
@@ -463,7 +463,7 @@
 
   .hex-modal-body {
     font-family: 'Source Serif 4', serif;
-    font-size: 12px;
+    font-size: 1.2rem;
     font-weight: 300;
     color: var(--slate);
     line-height: 1.65;
@@ -517,14 +517,17 @@
 
 <div id="hexModal" class="hex-modal">
   <svg class="hex-modal-frame" viewBox="0 0 440 508" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="220,3 437,127 437,381 220,505 3,381 3,127"
-             fill="var(--cream)" stroke="var(--gold)" stroke-width="3"/>
+    <polygon points="220,3 437,127 437,381 220,505 3,381 3,127" fill="var(--cream)" stroke="var(--gold)" stroke-width="3"/>
   </svg>
   <div class="hex-modal-content">
     <div class="hex-center-eyebrow" contenteditable="true" data-placeholder="Category"></div>
     <h2 class="hex-modal-title" contenteditable="true" data-placeholder="Title">The Right To Change The Channel</h2>
     <div class="hex-modal-rule"></div>
-    <div class="hex-modal-body" contenteditable="true" data-placeholder="Expand on this framework..."></div>
+    <div class="hex-modal-body" contenteditable="true" data-placeholder="Expand on this framework...">
+      <p>Aliquip velit ex labore velit ullamco irure nostrud cillum nostrud amet qui nisi do. Et laboris tempor esse aliquip ad nisi dolor sint. Eiusmod elit labore Lorem. In pariatur ut ullamco. Magna labore laborum sint duis labore adipisicing ut non id aliqua ad excepteur commodo nostrud consequat. Tempor dolor proident laboris laborum labore mollit ad do incididunt.</p>
+      <p>Minim velit incididunt dolore eu labore. Esse eu id amet culpa magna non. Minim deserunt quis do reprehenderit esse sit. Minim id deserunt amet eiusmod. Officia proident do nisi ad quis velit do est.</p>
+      <p>Enim esse Lorem et cupidatat. Sit duis ex eu dolor officia magna eu. Ipsum proident sint aliquip minim cupidatat nulla ex fugiat deserunt anim. Nulla aliquip ipsum pariatur esse aliquip ex nostrud officia nisi non.</p>
+    </div>
   </div>
 </div>
 
