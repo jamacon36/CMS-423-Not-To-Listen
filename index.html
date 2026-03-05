@@ -245,7 +245,7 @@
 
   /* SVG segment highlight */
   .hex-segment {
-    transition: stroke 0.25s, stroke-width 0.25s, filter 0.25s;
+    transition: stroke 0.25s, stroke-width 0.25s, filter 0.25s, opacity 0.25s;
   }
 
   .hex-segment.highlighted {
@@ -368,6 +368,110 @@
     letter-spacing: 0.05em;
   }
 
+  /* Hex interior — interactive */
+  #hexInterior {
+    transition: fill 0.25s;
+  }
+
+  #hexInterior.hovered {
+    fill: var(--gold-pale);
+  }
+
+  #hexClickOverlay {
+    cursor: pointer;
+  }
+
+  #hexHoverHint {
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  /* SVG elements that fade when hex modal is open — own their opacity transition */
+  .svg-connector,
+  .junction-dot,
+  .section-label,
+  .outer-hex-ring {
+    transition: opacity 0.25s;
+  }
+
+  /* Hide SVG decorations when hex modal is open */
+  #hexDiagram.hex-expanded .hex-segment,
+  #hexDiagram.hex-expanded .svg-connector,
+  #hexDiagram.hex-expanded .junction-dot,
+  #hexDiagram.hex-expanded .section-label,
+  #hexDiagram.hex-expanded .outer-hex-ring {
+    opacity: 0;
+  }
+
+  /* Hex modal */
+  .hex-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 440px;
+    height: 508px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.95);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .hex-modal.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .hex-modal-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .hex-modal-content {
+    position: absolute;
+    top: 26%;
+    left: 12%;
+    right: 12%;
+    bottom: 26%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow-y: auto;
+    gap: 10px;
+  }
+
+  .hex-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.4;
+    outline: none;
+  }
+
+  .hex-modal-rule {
+    width: 40px;
+    height: 1.5px;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .hex-modal-body {
+    font-family: 'Source Serif 4', serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--slate);
+    line-height: 1.65;
+    text-align: center;
+    outline: none;
+    flex: 1;
+  }
+
   /* Section tag badges */
   .badge {
     display: inline-block;
@@ -410,6 +514,19 @@
 </div>
 
 <div class="panel-backdrop"></div>
+
+<div id="hexModal" class="hex-modal">
+  <svg class="hex-modal-frame" viewBox="0 0 440 508" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="220,3 437,127 437,381 220,505 3,381 3,127"
+             fill="var(--cream)" stroke="var(--gold)" stroke-width="3"/>
+  </svg>
+  <div class="hex-modal-content">
+    <div class="hex-center-eyebrow" contenteditable="true" data-placeholder="Category"></div>
+    <h2 class="hex-modal-title" contenteditable="true" data-placeholder="Title">The Right To Change The Channel</h2>
+    <div class="hex-modal-rule"></div>
+    <div class="hex-modal-body" contenteditable="true" data-placeholder="Expand on this framework..."></div>
+  </div>
+</div>
 
 <div class="main-container">
 
@@ -473,10 +590,10 @@
         </defs>
 
         <!-- Outer faint hex ring -->
-        <polygon points="200,8 360,97 360,283 200,372 40,283 40,97" fill="none" stroke="#b8975a" stroke-width="0.6" opacity="0.2"/>
+        <polygon class="outer-hex-ring" points="200,8 360,97 360,283 200,372 40,283 40,97" fill="none" stroke="#b8975a" stroke-width="0.6" opacity="0.2"/>
 
         <!-- Hex interior fill -->
-        <polygon points="200,30 340,110 340,270 200,350 60,270 60,110" fill="var(--white)"/>
+        <polygon id="hexInterior" points="200,30 340,110 340,270 200,350 60,270 60,110" fill="var(--white)"/>
 
         <!--
           Three perimeter segments, one per panel.
@@ -507,17 +624,17 @@
               stroke-linejoin="round" stroke-linecap="round"/>
 
         <!-- Junction dots where segments meet -->
-        <circle cx="60"  cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
-        <circle cx="340" cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
-        <circle cx="200" cy="350" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+        <circle class="junction-dot" cx="60"  cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+        <circle class="junction-dot" cx="340" cy="110" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
+        <circle class="junction-dot" cx="200" cy="350" r="3.5" fill="white" stroke="#b8975a" stroke-width="1.5"/>
 
         <!-- Section labels — positioned in each open region -->
-        <text x="200" y="90" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Public Spaces</text>
-        <text text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">
-          <tspan x="120" y="250">When the Speech</tspan>
-          <tspan x="120" dy="14">Is Disagreeable</tspan>
+        <text class="section-label" x="200" y="90" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Public Spaces</text>
+        <text class="section-label" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">
+          <tspan x="120" y="250">In Semi-Private</tspan>
+          <tspan x="120" dy="14">Spaces</tspan>
         </text>
-        <text x="280" y="255" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Private Spaces</text>
+        <text class="section-label" x="280" y="255" text-anchor="middle" fill="#1a2744" font-family="'Playfair Display', serif" font-size="11" font-weight="600" letter-spacing="0.08em" opacity="0.45">In Private Spaces</text>
 
         <!-- Center label — floats in the assembled hex interior, no enclosing circle -->
         <foreignObject x="120" y="145" width="160" height="90">
@@ -539,6 +656,16 @@
             <path d="M0,0 L6,3 L0,6 Z" fill="#b8975a" opacity="0.6"/>
           </marker>
         </defs>
+
+        <!-- Transparent click/hover overlay — sits above all SVG content -->
+        <polygon id="hexClickOverlay" points="200,30 340,110 340,270 200,350 60,270 60,110" fill="transparent"/>
+
+        <!-- Hover hint — shown by JS on mouseenter of hexClickOverlay -->
+        <text id="hexHoverHint" x="200" y="285" text-anchor="middle"
+          fill="#b8975a" font-family="'Source Serif 4', serif" font-size="9"
+          letter-spacing="0.18em" opacity="0">
+          CLICK TO EXPAND
+        </text>
       </svg>
     </div>
 
@@ -587,6 +714,8 @@
         p.parentElement.style.minHeight = '';
       }, { once: true });
     });
+    document.getElementById('hexModal').classList.remove('open');
+    document.getElementById('hexDiagram').classList.remove('hex-expanded');
     backdrop.classList.remove('active');
   }
 
@@ -618,6 +747,30 @@
         panel.classList.remove('highlighted');
       }
     });
+  });
+
+  const hexInterior = document.getElementById('hexInterior');
+  const hexOverlay = document.getElementById('hexClickOverlay');
+  const hexModal = document.getElementById('hexModal');
+  const hexHoverHint = document.getElementById('hexHoverHint');
+
+  hexOverlay.addEventListener('mouseenter', () => {
+    hexInterior.classList.add('hovered');
+    hexHoverHint.setAttribute('opacity', '0.7');
+  });
+
+  hexOverlay.addEventListener('mouseleave', () => {
+    hexInterior.classList.remove('hovered');
+    hexHoverHint.setAttribute('opacity', '0');
+  });
+
+  hexOverlay.addEventListener('click', () => {
+    collapseAll();
+    hexModal.classList.add('open');
+    document.getElementById('hexDiagram').classList.add('hex-expanded');
+    backdrop.classList.add('active');
+    hexInterior.classList.remove('hovered');
+    hexHoverHint.setAttribute('opacity', '0');
   });
 </script>
 </body>
