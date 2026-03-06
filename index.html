@@ -410,7 +410,7 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 40rem;
+    width: 56rem;
     aspect-ratio: 1;
     z-index: 100;
     opacity: 0;
@@ -443,8 +443,8 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    overflow-y: auto;
     gap: 10px;
+    min-height: 0;
   }
 
   .hex-modal-title {
@@ -454,6 +454,7 @@
     color: var(--navy);
     line-height: 1.4;
     outline: none;
+    flex-shrink: 0;
   }
 
   .hex-modal-rule {
@@ -463,16 +464,48 @@
     flex-shrink: 0;
   }
 
+  .hex-modal-body {
+    background: white;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    text-align: left;
+    outline: none;
+  }
+
   .hex-modal-body p {
     font-family: 'Source Serif 4', serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 300;
     color: var(--slate);
-    line-height: 1.65;
-    text-align: center;
-    outline: none;
-    flex: 1;
-    margin-bottom: .5rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .hex-modal-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .hex-modal-body em {
+    font-style: italic;
+    color: var(--navy);
+  }
+
+  .hex-modal-body blockquote {
+    border-left: 3px solid var(--gold);
+    margin: 0.75rem 0;
+    padding: 0.5rem 1rem;
+    background: var(--gold-pale);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .hex-modal-body blockquote p {
+    font-style: italic;
+    color: var(--navy);
+    margin-bottom: 0;
   }
 
   /* Panel content */
@@ -752,7 +785,7 @@
         <div class="panel-header">
           <div>
             <div class="badge">1978</div>
-            <h2 class="panel-title">Pacifica v. FCC</h2>
+            <h2 class="panel-title">FCC v. Pacifica Foundation</h2>
             <div class="expand-hint">Click to expand</div>
           </div>
 
