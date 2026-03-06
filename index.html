@@ -508,6 +508,69 @@
     margin-bottom: 0;
   }
 
+  /* Hex modal tabs */
+  .hex-modal-tabs {
+    display: flex;
+    border-bottom: 1.5px solid var(--gold-pale);
+    flex-shrink: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .hex-tab {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.35rem 0.75rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .hex-tab.active {
+    color: var(--navy);
+    border-bottom-color: var(--gold);
+  }
+
+  .hex-tab:hover:not(.active) {
+    color: var(--navy);
+  }
+
+  .hex-tab-pane {
+    display: none;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+  }
+
+  .hex-tab-pane.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hex-modal-sources ol {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--slate);
+    line-height: 1.65;
+    padding-left: 1.25rem;
+    margin: 0;
+  }
+
+  .hex-modal-sources ol li {
+    margin-bottom: 0.6rem;
+  }
+
+  .hex-modal-sources ol li:last-child {
+    margin-bottom: 0;
+  }
+
   /* Panel content */
   .panel-content {
     margin-top: 12px;
@@ -835,11 +898,40 @@
     <div class="hex-center-eyebrow" contenteditable="true" data-placeholder="Category"></div>
     <h2 class="hex-modal-title" contenteditable="true" data-placeholder="Title">The Right To Change The Channel</h2>
     <div class="hex-modal-rule"></div>
-    <div class="hex-modal-body" contenteditable="true" data-placeholder="Expand on this framework...">
-      <p>The jurisdiction of the Federal Communications Commission is the broadcast spectrum on the public airwaves. Americans who still use broadcast television to receive their news are particularly subject to FCC regulations. A part of FCC jurisdiction is who to lease frequencies on the airwaves to and what those entities transmit over those frequencies to American citizens.</p>
-      <p>As demonstrated by the 3 Supreme Court cases included in this infographic, Americans have the right not only to freedom of expression under First Amendment law but also to freedom from expression. This right extends, as demonstrated in Pacifica, to their television sets in the privacy of their own home. The role of the FCC to vouchsafe that right is enshrined in the spirit of your own 1975 declaratory order that was the very subject of the Pacifica case.</p>
-      <p>However, there are a grand total of 4 broadcasters as of 2021 according to a <a href="https://futureofmedia.hsites.harvard.edu/index-us-mainstream-media-ownership" target="_blank">Harvard University Study</a> serving all of the American local cable markets. Some markets are only served by one of these broadcasters. When an American consumer in one of these under-diversified markets wants to change the channel to see another viewpoint, say on their local cable news, they are not able to escape the views of one of these broadcasters. A First Amendment attorney might see this as constituting a captive audience of this one corporate broadcaster.</p>
-      <p>May this graphic and the case law supporting it serve as a wake up call for the administrators at the Federal Communications Commission: you are failing in your duty to the First Amendment rights of American citizens in not regulating against this media monopoly. As a citizen of the United States I ask you to please do better and start inquiries into breaking up this monolith of corporate media ownership.</p>
+    <div class="hex-modal-tabs">
+      <button type="button" class="hex-tab active" data-tab="content">Content</button>
+      <button type="button" class="hex-tab" data-tab="sources">Sources</button>
+    </div>
+    <div class="hex-tab-pane active" data-pane="content">
+      <div class="hex-modal-body" contenteditable="true" data-placeholder="Expand on this framework...">
+        <p>The jurisdiction of the Federal Communications Commission is the broadcast spectrum on the public airwaves. According to your own website the FCC “regulates interstate and international communications by radio, television, wire, satellite and cable in all 50 states, the District of Columbia and U.S. territories.” (<em>What We Do</em>, n.d.) Americans who use broadcast television to receive their local news are particularly subject to FCC regulations. A part of FCC jurisdiction is who to lease frequencies on the airwaves to and what those entities transmit over those frequencies to American citizens.</p>
+        <blockquote><p>The FCC is responsible for managing and licensing the electromagnetic spectrum for commercial users and for non-commercial users including: state, county and local governments. This includes public safety, commercial and non-commercial fixed and mobile wireless services, broadcast television and radio, satellite and other services. In licensing the spectrum, the Commission promotes efficient and reliable access to the spectrum for a variety of innovative uses as well as promotes public safety and emergency response. (<em>Licensing</em>, n.d.)</p></blockquote>
+        <p>As demonstrated by the 3 Supreme Court cases included in this infographic, Americans have the right not only to freedom of expression under First Amendment law but also to freedom from expression. First codified in the limitation criteria described in the majority opinion in <em>Cohen v. California</em> Americans include what has come to be known as the captive audience doctrine.</p>
+        <blockquote><p>The ability of government, consonant with the Constitution, to shut off discourse solely to protect others from hearing it is, in other words, dependent upon a showing that substantial privacy interests are being invaded in an essentially intolerable manner. (Cohen V. California, 403 U.S. 15 (1971), n.d., p. 21)</p></blockquote>
+        <p>Essentially, American citizens have the right to be held captive to anyone’s expression, doing so constitutes a violation of privacy of the captive citizen.</p>
+        <p>This right not to be captive to expression was reinforced to include their television sets in the privacy of their own home in <em>FCC v. Pacifica Foundation</em>. As Justice John Paul Stevens noted in the majority opinion</p>
+        <blockquote><p>[T]he broadcast media have established a uniquely pervasive presence in the lives of all Americans. Patently offensive, indecent material presented over the airwaves confronts the citizen not only in public, but also in the privacy of the home, where the individual's right to be left alone plainly outweighs the First Amendment rights of an intruder. (<em>FCC V. Pacifica Foundation, 438 U.S. 748 (1978)</em>, n.d.)</p></blockquote>
+        <p>In outlining the right to be left alone in the privacy of the home Justice Stevens draws from the captive audience doctrine described as part of the limitation criteria set forth in <em>Cohen v. California</em>. Elsewhere the Court has reinforced this right as a matter of degree of captivity. “[T]he court has also held that captive audience doctrine applies ‘where the degree of captivity makes it impractical for the unwilling viewer… to avoid exposure.’” (“The Captive Audience Doctrine Today,” 2025, p. 3)</p>
+        <p>As recently as 2011 the Court reaffirmed its commitment to the doctrine in <em>Snyder v. Phelps</em>. Westboro Baptist Church prevailed in the emotional distress case brought against them by the father of a fallen soldier whose funeral Westboro was picketing. However distasteful and vile the act of picketing outside of a funeral is, the Court held firm to their First Amendment right in part owing to the lack of captivity of their audience.</p>
+        <blockquote><p>The majority ruled that the First Amendment protected the church from liability for their speech on a matter of public concern in a public place, which did not disrupt or physically interfere with a funeral. (Rosenberg, 2021, p. 169)</p></blockquote>
+        <p>As the funeral started Westboro packed up their protest and left, ensuring that they were not holding the funeral goers captive to their expression.</p>
+        <p>The role of the FCC to vouchsafe that right is enshrined in the spirit of your own 1975 declaratory order that was the very subject of the <em>Pacifica</em> case. The order calls out the following in section 9</p>
+        <blockquote><p>Broadcasting requires special treatment because of 4 important considerations: … (2) radio receivers are in the home, a place where people’s privacy interest is entitled to extra defence (“Citizen’s Complaint Against Pacifica Foundation Station WBAI (FM), New York, NY -- Declaratory Order,” 2018, p. 4)</p></blockquote>
+        <p>Echoing the privacy interest of captive audience doctrine enforcement the FCC’s order safeguards listeners and viewers in their own homes from becoming a captive to any one entity or broadcaster.</p>
+        <p>However, there are a grand total of 4 broadcasters as of 2021 according to a <a href="https://futureofmedia.hsites.harvard.edu/index-us-mainstream-media-ownership">Harvard University Study</a> serving all American local cable markets. Some markets are only served by one of these broadcasters. When an American consumer in one of these under-diversified markets wants to change the channel to see another viewpoint, say on their local cable news, they are not able to escape the views of one of these broadcasters. A First Amendment attorney might see this as the FCC allowing the creation of a captive audience to the one corporate broadcaster in a given market.</p>
+        <p>The consumers in these underserved markets are unable to reasonably find escape from the viewpoints of the media conglomerate that’s serving their local broadcast communities.</p>
+        <p>In light of this exploration and the case law supporting it I call on the administrators at the Federal Communications Commission to regulate their allocation of frequencies to allow for more competition in local broadcasting markets. You are failing in your duty to the First Amendment rights of American citizens in not regulating against this media monopoly. As a citizen of the United States I ask you to please do better and start inquiries into breaking up this monolith of corporate media ownership.</p>
+      </div>
+    </div>
+    <div class="hex-tab-pane" data-pane="sources">
+      <div class="hex-modal-body hex-modal-sources" contenteditable="true" data-placeholder="Add sources and citations...">
+        <ol>
+          <li><em>Red Lion Broadcasting Co. v. FCC</em>, 395 U.S. 367 (1969).</li>
+          <li><em>FCC v. Pacifica Foundation</em>, 438 U.S. 726 (1978).</li>
+          <li><em>FCC v. League of Women Voters</em>, 468 U.S. 364 (1984).</li>
+          <li>Shorenstein Center on Media, Politics and Public Policy. <em>Index of U.S. Mainstream Media Ownership.</em> Harvard Kennedy School, 2021. futureofmedia.hsites.harvard.edu/index-us-mainstream-media-ownership.</li>
+        </ol>
+      </div>
     </div>
   </div>
 </div>
@@ -935,6 +1027,17 @@
   // Remove the hover class when the cursor leaves the overlay
   hexOverlay.addEventListener('mouseleave', () => {
     hexInterior.classList.remove('hovered');
+  });
+
+  // Switch between Content and Sources tabs in the hex modal
+  document.querySelectorAll('.hex-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.hex-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.hex-tab-pane').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`.hex-tab-pane[data-pane="${target}"]`).classList.add('active');
+    });
   });
 
   // Clicking the center hex collapses any open panels, then opens the hex modal
