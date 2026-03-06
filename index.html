@@ -812,46 +812,75 @@
 </div>
 
 <script>
+  // The semi-transparent backdrop overlay that dims the page when a panel or modal is open
   const backdrop = document.querySelector('.panel-backdrop');
 
+  // Collapses any expanded info panels and closes the hex center modal.
+  // Called when the user clicks the backdrop, presses Escape, or opens a different panel.
   function collapseAll() {
+    // Trigger the collapse animation on every currently-expanded panel
     document.querySelectorAll('.info-panel.expanded').forEach(p => {
       p.classList.add('collapsing');
       p.classList.remove('expanded', 'highlighted');
+
+      // Also un-highlight the corresponding SVG hex segment
       const s = document.getElementById(p.dataset.segment);
       if (s) s.classList.remove('highlighted');
+
+      // Once the CSS collapse animation finishes, clean up the collapsing class
+      // and reset the min-height that was set to prevent layout jump on expand
       p.addEventListener('animationend', () => {
         p.classList.remove('collapsing');
         p.parentElement.style.minHeight = '';
       }, { once: true });
     });
+
+    // Close the center hex modal and remove the expanded state from the SVG diagram
     document.getElementById('hexModal').classList.remove('open');
     document.getElementById('hexDiagram').classList.remove('hex-expanded');
+
+    // Hide the backdrop
     backdrop.classList.remove('active');
   }
 
+  // Clicking the backdrop collapses everything
   backdrop.addEventListener('click', collapseAll);
+
+  // Pressing Escape also collapses everything
   document.addEventListener('keydown', e => { if (e.key === 'Escape') collapseAll(); });
 
+  // Wire up expand/collapse and hover highlighting for each info panel
   document.querySelectorAll('.info-panel[data-segment]').forEach(panel => {
+    // Find the SVG segment element that corresponds to this panel via data-segment
     const seg = document.getElementById(panel.dataset.segment);
 
+    // Clicking the panel header expands or collapses the panel
     panel.querySelector('.panel-header').addEventListener('click', () => {
       const wasExpanded = panel.classList.contains('expanded');
+
+      // Always collapse everything first so only one panel is open at a time
       collapseAll();
+
       if (!wasExpanded) {
+        // Lock the parent cell's height before expanding so the grid doesn't reflow
         panel.parentElement.style.minHeight = panel.offsetHeight + 'px';
+
+        // Expand this panel and highlight both it and its SVG segment
         panel.classList.add('expanded', 'highlighted');
         seg.classList.add('highlighted');
+
+        // Show the backdrop
         backdrop.classList.add('active');
       }
     });
 
+    // Hovering a panel highlights it and its corresponding SVG segment
     panel.addEventListener('mouseenter', () => {
       seg.classList.add('highlighted');
       panel.classList.add('highlighted');
     });
 
+    // Leaving a panel removes the hover highlight, but only if it isn't expanded
     panel.addEventListener('mouseleave', () => {
       if (!panel.classList.contains('expanded')) {
         seg.classList.remove('highlighted');
@@ -860,24 +889,28 @@
     });
   });
 
-  const hexInterior = document.getElementById('hexInterior');
-  const hexOverlay = document.getElementById('hexClickOverlay');
-  const hexModal = document.getElementById('hexModal');
+  // References for the center hexagon interactive elements
+  const hexInterior = document.getElementById('hexInterior');  // the filled hex polygon
+  const hexOverlay  = document.getElementById('hexClickOverlay'); // invisible click target over the hex
+  const hexModal    = document.getElementById('hexModal');      // the modal that opens on hex click
 
+  // Add a CSS hover class to the hex interior when the cursor enters the overlay
   hexOverlay.addEventListener('mouseenter', () => {
     hexInterior.classList.add('hovered');
   });
 
+  // Remove the hover class when the cursor leaves the overlay
   hexOverlay.addEventListener('mouseleave', () => {
     hexInterior.classList.remove('hovered');
   });
 
+  // Clicking the center hex collapses any open panels, then opens the hex modal
   hexOverlay.addEventListener('click', () => {
     collapseAll();
     hexModal.classList.add('open');
     document.getElementById('hexDiagram').classList.add('hex-expanded');
     backdrop.classList.add('active');
-    hexInterior.classList.remove('hovered');
+    hexInterior.classList.remove('hovered'); // clear hover state since click consumed it
   });
 </script>
 </body>
