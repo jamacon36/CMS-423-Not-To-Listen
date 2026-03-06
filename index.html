@@ -1057,6 +1057,11 @@
     backdrop.classList.add('active');
     hexInterior.classList.remove('hovered'); // clear hover state since click consumed it
   });
+
+  // Clicking anywhere on the hex modal outside the polygon content closes it
+  hexModal.addEventListener('click', e => {
+    if (e.target === hexModal) collapseAll();
+  });
 </script>
 </body>
 </html>
